@@ -11,6 +11,7 @@ const internController = require('../controllers/internController')
 router.post('/colleges', collegeController.registerCollege);
 
 //Intern Routes
-router.post('/intern', internController.registerIntern);
+router.post('/interns', internController.registerIntern);
+router.get('/collegeDetails', internController.getIntern);
 
 module.exports = router;
