@@ -68,7 +68,7 @@ const registerIntern = async function (req, res) {
             return
         }
 
-        const college = await collegeModel.findOne({collegeName});
+        const college = await collegeModel.findOne({name: collegeName});
 
         const collegeId = college._id
 
