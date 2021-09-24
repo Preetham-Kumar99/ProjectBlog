@@ -114,18 +114,16 @@ const getIntern = async function (req, res) {
 
         const interns = await internModel.find({ collegeId: college._id }, {name:1, email:1, mobile:1})
 
-        if (Array.isArray(interns) && interns.length === 0) {
-            res.status(404).send({ status: false, message: 'No Interns Registered' })
-            return
-        }
+        // if (Array.isArray(interns) && interns.length === 0) {
+        //     res.status(404).send({ status: false, message: 'No Interns Registered' })
+        //     return
+        // }
 
         // console.log(college, college._id, interns, filterQuery)
           
         let details = {name: college.name, fullName: college.fullName, logoLink: college.logoLink, interns: interns }
 
         res.status(200).send({ status: true, data: details })
-
-
     } catch (error) {
         console.log(error)
         res.status(500).send({ status: false, message: error.message });
