@@ -23,15 +23,14 @@ const bookSchema = new mongoose.Schema({
     category: {
         type: String, 
         required: 'Category is required', 
-    },
+    }, 
     subcategory: {
-        type: String, 
+        type: Array, 
         required: 'subcategory is required', 
     },
     reviews: {
-        type: number, 
-        default: [], 
-        comment: Holds number of reviews of this book
+        type: Number, 
+        default: 0,
     },
     deletedAt: {
         type: Date, 

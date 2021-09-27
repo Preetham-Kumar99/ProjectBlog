@@ -15,8 +15,8 @@ const isValid = function(value) {
 }
 
 const PasswordLength = function(password) {
-    if(password.length >= 8 && password.length <= 15) return false
-    return true;
+    if(password.length >= 8 && password.length <= 15) return true
+    return false;
 }
 
 const isValidTitle = function(title) {
@@ -39,6 +39,10 @@ const isArray = function(arr) {
     return Array.isArray(arr)
 }
 
+const isValidDate = function(value) {
+    return Object.prototype.toString.call(value) === "[object Date]"
+}
+
 module.exports = {
     validateEmail,
     emailRegex: re,
@@ -48,5 +52,6 @@ module.exports = {
     isValidObjectId,
     isValidString,
     isArray,
-    PasswordLength
+    PasswordLength,
+    isValidDate
 };

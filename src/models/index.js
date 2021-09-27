@@ -1,4 +1,4 @@
 module.exports = {
-    authorModel: require('./authorModel'),
-    blogModel: require('./blogModel')
+    userModel: require('./userModel'),
+    bookModel: require('./bookModel')
 }

@@ -1,6 +1,6 @@
 const {jwt} = require('../utils')
 
-const autherAuth = async (req, res, next) => {
+const userAuth = async (req, res, next) => {
     try {
         const token = req.header('x-api-key')
         if(!token) {
@@ -15,7 +15,7 @@ const autherAuth = async (req, res, next) => {
             return;
         }
 
-        req.authorId = decoded.authorId;
+        req.userId = decoded.userId;
 
         next()
     } catch (error) {
@@ -24,4 +24,4 @@ const autherAuth = async (req, res, next) => {
     }
 }
 
-module.exports = autherAuth
+module.exports = userAuth
