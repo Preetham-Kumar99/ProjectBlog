@@ -14,6 +14,11 @@ const isValid = function(value) {
     return true;
 }
 
+const PasswordLength = function(password) {
+    if(password.length >= 8 && password.length <= 15) return false
+    return true;
+}
+
 const isValidTitle = function(title) {
     return systemConfig.titleEnumArray.indexOf(title) !== -1
 }
@@ -42,5 +47,6 @@ module.exports = {
     isValidRequestBody,
     isValidObjectId,
     isValidString,
-    isArray
+    isArray,
+    PasswordLength
 };
