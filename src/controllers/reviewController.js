@@ -156,10 +156,6 @@ const deleteReview = async function (req, res) {
             res.status(404).send({ status: false, message: `Book not found` })
         }
 
-        // if(book.isDeleted && deletedAt !== null) {
-        //      res.status(404).send({status: false, message: `Book is already deleted.`}) 
-        //}
-
         if (!validator.isValidObjectId(reviewId)) {
             res.status(400).send({ status: false, message: `${reviewId} is not a valid book id` })
         }
