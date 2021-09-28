@@ -12,20 +12,23 @@
 ### Models
 - Url Model
 ```
-{ urlCode: { mandatory, unique, lowercase, trim }, longUrl: {mandatory}, shortUrl: {mandatory, unique} }
+{ urlCode: { mandatory, unique, lowercase, trim }, longUrl: {mandatory, valid url}, shortUrl: {mandatory, unique} }
 ```
 
 ### POST /url/shorten
-- Create a short URL
-- Return created url details
+- Create a short URL for an original url recieved in the request.
+- Return the shortened unique url. Refer [this](#url-shorten-response) for the response
+- Ensure the same response is returned for an original url everytime
 - Return HTTP status 400 for an invalid request
 
 ### GET /:code
 - Redirect to long/original URL
+- Use a valid HTTP status code meant for a redirection scenario.
+- Return a suitable error for a url not found
 - Return HTTP status 400 for an invalid request
 
 ## Testing 
-- To test these apis create a new collection in Postman named Project 2 Url Shortner
+- To test these apis create a new collection in Postman named Project 4 Url Shortner
 - Each api should have a new request in this collection
 - Each request in the collection should be rightly named. Eg  Url shorten, Get Url etc
 - Each member of each team should have their tests in running state
@@ -55,8 +58,8 @@
 ```yaml
 {
   "data": {
-    "longUrl": "https://www.xyx.com",
-    "shortUrl": "http://localhost:3000/xyz",
+    "longUrl": "https://www.oneofthelongesturlseverseenbyhumans.com",
+    "shortUrl": "https://bit.ly/2WlQej2a",
     "urlCode": "xyz"
   }
 }
