@@ -11,7 +11,7 @@ const createBook = async function (req, res) {
         const userIdFromToken = req.userId;
 
         if(!validator.isValidRequestBody(requestBody)) {
-            res.status(400).send({status: false, message: 'Invalid request parameters. Please provide blog details'})
+            res.status(400).send({status: false, message: 'Invalid request parameters. Please provide book details'})
             return
         }
 
@@ -141,12 +141,12 @@ const listBooks = async function (req, res) {
     try {
         const filterQuery = {isDeleted: false}
         const queryParams = req.query
-        const userIdFromToken = req.userId
+        // const userIdFromToken = req.userId
 
-        if(!validator.isValidObjectId(userIdFromToken)) {
-            res.status(400).send({status: false, message: `${userIdFromToken} is not a valid token id`})
-            return 
-        }
+        // if(!validator.isValidObjectId(userIdFromToken)) {
+        //     res.status(400).send({status: false, message: `${userIdFromToken} is not a valid token id`})
+        //     return 
+        // }
 
         if(validator.isValidRequestBody(queryParams)) {
             const {userId, category, subcategory} = queryParams
@@ -163,8 +163,6 @@ const listBooks = async function (req, res) {
                 const subcatArr = subcategory.trim().split(',').map(subcat => subcat.trim());
                 filterQuery['subcategory'] = {$all: subcatArr}
             }
-
-            filterQuery['userId'] = userIdFromToken
         }
 
         const books = await bookModel.find(filterQuery,{_id:1,title:1,excerpt:1,userId:1,category:1,releasedAt:1,reviews:1}).sort({title:1})
@@ -184,26 +182,26 @@ const getBookById = async function (req, res) {
     try {
         const bookId = req.params.bookId
 
-        const userIdFromToken = req.userId
+        // const userIdFromToken = req.userId
 
         if (!validator.isValidObjectId(bookId)) {
             res.status(400).send({ status: false, message: `${bookId} is not a valid book id` })
             return 
         }
 
-        if(!validator.isValidObjectId(userIdFromToken)) {
-            res.status(400).send({status: false, message: `${userIdFromToken} is not a valid token id`})
-            return 
-        }
+        // if(!validator.isValidObjectId(userIdFromToken)) {
+        //     res.status(400).send({status: false, message: `${userIdFromToken} is not a valid token id`})
+        //     return 
+        // }
 
         const book = await bookModel.findById(bookId,{__v:0})
 
-        let userId = book.userId
+        // let userId = book.userId
 
-        if(userId.toString() !== userIdFromToken){
-            res.status(400).send({status: false, message: `You Dont hace access to this Book try using your Id's of books you have posted`})
-            return 
-        }
+        // if(userId.toString() !== userIdFromToken){
+        //     res.status(400).send({status: false, message: `You Dont have access to this Book try using your Id's of books you have posted`})
+        //     return 
+        // }
 
         if (!book) {
             res.status(404).send({ status: false, message: "Book not found" })

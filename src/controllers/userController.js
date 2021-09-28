@@ -24,6 +24,18 @@ const registerUser = async function (req, res) {
             return
         }
 
+        if(!validator.isValidNumber(phone)) {
+            res.status(400).send({status: false, message: 'phone attribute should be a number'})
+            return
+        }
+
+        const isPhoneAlreadyUsed = await userModel.findOne({phone});
+
+        if(isPhoneAlreadyUsed) {
+            res.status(400).send({status: false, message: `${phone} is already registered`})
+            return
+        }
+
         if(!validator.isValid(title)) {
             res.status(400).send({status: false, message: 'Title is required'})
             return
@@ -58,11 +70,6 @@ const registerUser = async function (req, res) {
 
         if(!validator.PasswordLength(password)){
             res.status(400).send({status: false, message: `Password length should be more than 8 and less than 15`})
-            return
-        }
-
-        if(!validator.isValid(address)){
-            res.status(400).send({status: false, message: `address is required`})
             return
         }
         // Validation ends
