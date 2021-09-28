@@ -49,7 +49,6 @@
   msg: ""
 }
 ```
-```
 ## Response samples
 
 ### Url shorten response
@@ -62,5 +61,4 @@
   }
 }
 
-```
 ```
