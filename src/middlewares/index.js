@@ -1,3 +1,3 @@
 module.exports = {
-    authorAuth: require('./authorAuth')
+    userAuth: require('./userAuth')
 }

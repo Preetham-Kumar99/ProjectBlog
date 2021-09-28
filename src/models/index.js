@@ -1,4 +1,5 @@
 module.exports = {
     userModel: require('./userModel'),
-    bookModel: require('./bookModel')
+    bookModel: require('./bookModel'),
+    reviewModel: require('./reviewModel')
 }
