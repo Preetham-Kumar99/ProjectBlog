@@ -19,6 +19,11 @@ const PasswordLength = function(password) {
     return false;
 }
 
+const ratingRange = function(rating) {
+    if(rating >= 1 && rating <= 5) return true
+    return false;
+}
+
 const isValidTitle = function(title) {
     return systemConfig.titleEnumArray.indexOf(title) !== -1
 }
@@ -33,6 +38,10 @@ const isValidObjectId = function(objectId) {
 
 const isValidString = function(value) {
     return Object.prototype.toString.call(value) === "[object String]"
+}
+
+const isValidNumber = function(value) {
+    return Object.prototype.toString.call(value) === "[object Number]"
 }
 
 const isArray = function(arr) {
@@ -53,5 +62,7 @@ module.exports = {
     isValidString,
     isArray,
     PasswordLength,
-    isValidDate
+    isValidDate,
+    isValidNumber,
+    ratingRange
 };

@@ -1,4 +1,5 @@
 module.exports = {
     userController: require('./userController'),
-    bookController: require('./bookController')
+    bookController: require('./bookController'),
+    reviewController: require('./reviewController')
 }
