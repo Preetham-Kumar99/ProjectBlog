@@ -250,7 +250,7 @@ const updateBook = async function (req, res) {
         let userId = book.userId
 
         if(userId.toString() !== userIdFromToken){
-            res.status(400).send({status: false, message: `You Dont hace access to this Book try using your Id's of books you have posted`})
+            res.status(400).send({status: false, message: `You Dont have access to this Book try using your Id's of books you have posted`})
             return 
         }
 
@@ -338,7 +338,7 @@ const deleteBookByID = async function (req, res) {
         let userId = book.userId
 
         if(userId.toString() !== userIdFromToken){
-            res.status(400).send({status: false, message: `You Dont hace access to this Book try using your Id's of books you have posted`})
+            res.status(400).send({status: false, message: `You Dont have access to this Book try using your Id's of books you have posted`})
             return 
         }
 
