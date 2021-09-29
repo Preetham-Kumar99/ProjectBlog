@@ -95,13 +95,13 @@ const updateReview = async function (req, res) {
 
         let reviewExist = await reviewModel.findById(reviewId)
 
-        if (!reviewExist) {
+        if (reviewExist) {
             res.status(400).send({ status: false, message: `Review Not found` })
             return
         }
 
         if (!validator.isValidRequestBody(requestBody)) {
-            res.status(200).send({ status: true, message: 'No paramateres passed. Book unmodified', data: book })
+            res.status(200).send({ status: true, message: 'No paramateres passed. Book unmodified' })
             return
         }
 
@@ -116,14 +116,13 @@ const updateReview = async function (req, res) {
             updatedReviewData['$set']['reviewedBy'] = reviewedBy
         }
 
-        if (!validator.isValid(rating)) {
+        if (validator.isValid(rating)) {
+            if (!validator.ratingRange(rating)) {
+                res.status(400).send({ status: false, message: 'rating should be in a range 1-5' })
+                return
+            }
             if (!Object.prototype.hasOwnProperty.call(updatedReviewData, '$set')) updatedReviewData['$set'] = {}
             updatedReviewData['$set']['rating'] = rating
-        }
-
-        if (!validator.ratingRange(rating)) {
-            res.status(400).send({ status: false, message: 'rating should be in a range 1-5' })
-            return
         }
 
         if (validator.isValid(review)) {
