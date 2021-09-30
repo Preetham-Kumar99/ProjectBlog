@@ -69,7 +69,7 @@ const registerUser = async function (req, res) {
         }
 
         if(!validator.PasswordLength(password)){
-            res.status(400).send({status: false, message: `Password length should be more than 8 and less than 15`})
+            res.status(400).send({status: false, message: `Password length should be 8 - 15 characters`})
             return
         }
         // Validation ends

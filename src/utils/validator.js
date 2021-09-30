@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 
 const {systemConfig} = require('../configs')
 
-const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const reemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const validateEmail = function(email) {
-    return re.test(email)
+    return reemail.test(email)
 };
 
 const isValid = function(value) {
@@ -54,7 +54,7 @@ const isValidDate = function(value) {
 
 module.exports = {
     validateEmail,
-    emailRegex: re,
+    emailRegex: reemail,
     isValid,
     isValidTitle,
     isValidRequestBody,
@@ -64,5 +64,5 @@ module.exports = {
     PasswordLength,
     isValidDate,
     isValidNumber,
-    ratingRange
+    ratingRange,
 };

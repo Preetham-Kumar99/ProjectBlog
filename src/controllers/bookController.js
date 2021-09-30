@@ -200,7 +200,7 @@ const getBookById = async function (req, res) {
             return
         }
 
-        const book = await bookModel.findById(bookId, { __v: 0 })
+        const book = await bookModel.find({_id: bookId, isDeleted: false, deletedAt: null}, { __v: 0 })
 
         if (!book) {
             res.status(404).send({ status: false, message: "Book not found" })
