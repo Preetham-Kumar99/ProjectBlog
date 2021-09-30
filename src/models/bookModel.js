@@ -33,11 +33,12 @@ const bookSchema = new mongoose.Schema({
         default: 0,
     },
     deletedAt: {
-        type: Date, 
+        type: Date
     }, 
     isDeleted: {
         type: Boolean, 
-        default: false},
+        default: false
+    },
     releasedAt: {
         type: Date, 
         required: 'releasedAt is required',

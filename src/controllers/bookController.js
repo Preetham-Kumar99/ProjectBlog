@@ -23,11 +23,46 @@ const createBook = async function (req, res) {
         // Extract params
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody;
 
-        // Validation starts
+        // Validation to check if parameters Exist
         if (!validator.isValid(title)) {
             res.status(400).send({ status: false, message: 'Title is required' })
             return
         }
+
+        if (!validator.isValid(excerpt)) {
+            res.status(400).send({ status: false, message: 'excerpt is required' })
+            return
+        }
+
+        if (!validator.isValid(userId)) {
+            res.status(400).send({ status: false, message: 'Userid is required' })
+            return
+        }
+
+        if (!validator.isValid(ISBN)) {
+            res.status(400).send({ status: false, message: `ISBN is required` })
+            return
+        }
+
+        if (!validator.isValid(category)) {
+            res.status(400).send({ status: false, message: 'category is required' })
+            return
+        }
+
+        if (!validator.isValid(subcategory)) {
+            res.status(400).send({ status: false, message: 'subcategory is required' })
+            return
+        }
+
+        if (!validator.isValid(releasedAt)) {
+            res.status(400).send({ status: false, message: `releasedAt is required` })
+            return
+        }
+
+        // Validation to check if parameters Exist ends
+
+
+        // Validation to check parameters type
 
         if (!validator.isValidString(title)) {
             res.status(400).send({ status: false, message: 'Title should be a String' })
@@ -41,18 +76,8 @@ const createBook = async function (req, res) {
             return
         }
 
-        if (!validator.isValid(excerpt)) {
-            res.status(400).send({ status: false, message: 'excerpt is required' })
-            return
-        }
-
         if (!validator.isValidString(excerpt)) {
             res.status(400).send({ status: false, message: 'excerpt should be a String' })
-            return
-        }
-
-        if (!validator.isValid(userId)) {
-            res.status(400).send({ status: false, message: 'Userid is required' })
             return
         }
 
@@ -73,11 +98,6 @@ const createBook = async function (req, res) {
             return
         }
 
-        if (!validator.isValid(ISBN)) {
-            res.status(400).send({ status: false, message: `ISBN is required` })
-            return
-        }
-
         if (!validator.isValidString(ISBN)) {
             res.status(400).send({ status: false, message: 'ISBN should be a String' })
             return
@@ -90,26 +110,12 @@ const createBook = async function (req, res) {
             return
         }
 
-        if (!validator.isValid(category)) {
-            res.status(400).send({ status: false, message: 'category is required' })
-            return
-        }
-
         if (!validator.isValidString(category)) {
             res.status(400).send({ status: false, message: 'category should be a String' })
             return
         }
 
-        if (!validator.isValid(subcategory)) {
-            res.status(400).send({ status: false, message: 'subcategory is required' })
-            return
-        }
-
-        if (!validator.isValid(releasedAt)) {
-            res.status(400).send({ status: false, message: `releasedAt is required` })
-            return
-        }
-        // Validation ends
+        // Validation to check parameters type
 
         const bookData = {
             title,
@@ -208,7 +214,7 @@ const getBookById = async function (req, res) {
         }
 
         if (book) {
-            let reviews = await reviewModel.find({ bookId: book._id })
+            let reviews = await reviewModel.find({ bookId: book._id },{createdAt:0, __v: 0, updatedAt:0})
             if (reviews) {
                 res.status(201).send({
                     status: true, message: "Books List", data: {
