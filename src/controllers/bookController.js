@@ -190,10 +190,10 @@ const getBookById = async function (req, res) {
 
         const userIdFromToken = req.userId
 
-        if (!validator.isValidObjectId(bookId)) {
-            res.status(400).send({ status: false, message: `${bookId} is not a valid book id` })
-            return
-        }
+        // if (!validator.isValidObjectId(bookId)) {
+        //     res.status(400).send({ status: false, message: `${bookId} is not a valid book id` })
+        //     return
+        // }
 
         if (!validator.isValidObjectId(userIdFromToken)) {
             res.status(400).send({ status: false, message: `${userIdFromToken} is not a valid token id` })
