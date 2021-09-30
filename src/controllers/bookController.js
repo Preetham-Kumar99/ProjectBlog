@@ -202,19 +202,12 @@ const getBookById = async function (req, res) {
 
         const book = await bookModel.findById(bookId, { __v: 0 })
 
-        // let userId = book.userId
-
-        // if(userId.toString() !== userIdFromToken){
-        //     res.status(400).send({status: false, message: `You Dont have access to this Book try using your Id's of books you have posted`})
-        //     return 
-        // }
-
         if (!book) {
             res.status(404).send({ status: false, message: "Book not found" })
         }
 
         if (book) {
-            let reviews = await reviewModel.find({ bookId: book._id },{createdAt:0, __v: 0, updatedAt:0})
+            let reviews = await reviewModel.find({ bookId: book._id, isDeleted: false, deletedAt: null },{createdAt:0, __v: 0, updatedAt:0, isDeleted:0})
             if (reviews) {
                 res.status(201).send({
                     status: true, message: "Books List", data: {

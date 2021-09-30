@@ -64,7 +64,9 @@ const createReview = async function (req, res) {
 
         const bookReview = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false, deletedAt: null }, { $inc: { reviews: 1 } })
 
-        res.status(201).send({ status: true, message: 'Review added successfully', data: newReview })
+        let reviewDisplay = {_id: newReview._id, rating: newReview.rating, reviewedBy: newReview.reviewedBy, reviewedAt: newReview. reviewedAt , review: newReview.review}
+
+        res.status(201).send({ status: true, message: 'Review added successfully', data: reviewDisplay })
 
     } catch (error) {
         console.log(error)
@@ -134,7 +136,7 @@ const updateReview = async function (req, res) {
             updatedReviewData['$set']['review'] = review
         }
 
-        const updatedReview = await reviewModel.findOneAndUpdate({ _id: reviewId }, updatedReviewData, { new: true }).select("-createdAt -__v  -updatedAt")
+        const updatedReview = await reviewModel.findOneAndUpdate({ _id: reviewId }, updatedReviewData, { new: true }).select("-createdAt -__v  -updatedAt -isDeleted")
 
         res.status(200).send({ status: true, message: 'Review updated successfully', data: updatedReview });
 
