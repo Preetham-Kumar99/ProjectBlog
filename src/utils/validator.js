@@ -9,7 +9,7 @@ function getrandom() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));   
     } 
     return text;
-}
+};
 
 const validateUrl = function(Url) {
     return reUrl.test(Url)

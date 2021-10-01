@@ -1,4 +1,4 @@
-const someSchema = new mongoose.Schema({})
+const mongoose = require('mongoose');
 
 const UrlSchema = new mongoose.Schema({ 
     urlCode: { 
