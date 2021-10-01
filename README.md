@@ -38,7 +38,7 @@ If you haven’t used tinyurl.com before, please try creating a new shortened UR
 
 ### POST /url/shorten
 - Create a short URL for an original url recieved in the request.
-- The baseUrl must be same for the return shortUrl. Example if the originalUrl is 
+- The baseUrl must be same for the returned shortUrl. Example if the originalUrl is http://abc.com/user/images/name/2 then the shortened url should be http://abc.com/xyz
 - Return the shortened unique url. Refer [this](#url-shorten-response) for the response
 - Ensure the same response is returned for an original url everytime
 - Return HTTP status 400 for an invalid request
@@ -80,10 +80,10 @@ If you haven’t used tinyurl.com before, please try creating a new shortened UR
 ```yaml
 {
   "data": {
-    "longUrl": "https://www.oneofthelongesturlseverseenbyhumans.com",
-    "shortUrl": "https://bit.ly/2WlQej2a",
-    "urlCode": "xyz"
-  }
+    "longUrl": "https://www.abc.com/oneofthelongesturlseverseenbyhumans.com",
+    "shortUrl": "https://www.abc.com/2WlQej2a",
+    "urlCode": "2WlQej2a"
+  } 
 }
 
 ```
