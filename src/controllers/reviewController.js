@@ -66,7 +66,11 @@ const createReview = async function (req, res) {
 
         let reviewDisplay = {_id: newReview._id, rating: newReview.rating, reviewedBy: newReview.reviewedBy, reviewedAt: newReview. reviewedAt , review: newReview.review}
 
-        res.status(201).send({ status: true, message: 'Review added successfully', data: reviewDisplay })
+        let books = JSON.parse(JSON.stringify(book))
+
+        books['ReviewData'] = reviewDisplay
+
+        res.status(201).send({ status: true, message: 'Review added successfully', data: books })
 
     } catch (error) {
         console.log(error)
@@ -138,7 +142,11 @@ const updateReview = async function (req, res) {
 
         const updatedReview = await reviewModel.findOneAndUpdate({ _id: reviewId }, updatedReviewData, { new: true }).select("-createdAt -__v  -updatedAt -isDeleted")
 
-        res.status(200).send({ status: true, message: 'Review updated successfully', data: updatedReview });
+        let books = JSON.parse(JSON.stringify(book))
+
+        books['ReviewData'] = updatedReview
+
+        res.status(201).send({ status: true, message: 'Review added successfully', data: books })
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });

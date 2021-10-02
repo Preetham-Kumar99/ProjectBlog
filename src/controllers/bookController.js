@@ -21,7 +21,7 @@ const createBook = async function (req, res) {
         }
 
         // Extract params
-        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody;
+        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt, bookCover } = requestBody;
 
         // Validation to check if parameters Exist
         if (!validator.isValid(title)) {
@@ -56,6 +56,11 @@ const createBook = async function (req, res) {
 
         if (!validator.isValid(releasedAt)) {
             res.status(400).send({ status: false, message: `releasedAt is required` })
+            return
+        }
+
+        if (!validator.isValid(bookCover)) {
+            res.status(400).send({ status: false, message: `bookCover is required` })
             return
         }
 
@@ -115,6 +120,20 @@ const createBook = async function (req, res) {
             return
         }
 
+        if (validator.isValidDate(releasedAt)) {
+            res.status(400).send({ status: false, message: 'releasedAt should be a Date' })
+            return
+        }
+        
+        if (!validator.validDate(releasedAt)) {
+            res.status(400).send({ status: false, message: `releasedAt should be a valid Date` })
+            return
+        }
+
+        if (!validator.isValidString(bookCover)) {
+            res.status(400).send({ status: false, message: 'bookCover should be a String' })
+            return
+        }
         // Validation to check parameters type
 
         const bookData = {
@@ -123,7 +142,8 @@ const createBook = async function (req, res) {
             userId,
             ISBN,
             category,
-            releasedAt
+            releasedAt,
+            bookCover
         }
 
         if (subcategory) {
@@ -200,23 +220,21 @@ const getBookById = async function (req, res) {
             return
         }
 
-        const book = await bookModel.find({_id: bookId, isDeleted: false, deletedAt: null}, { __v: 0 })
+        let books = await bookModel.findOne({ _id: bookId, isDeleted: false, deletedAt: null }, { __v: 0 })
 
-        if (!book) {
+        if (!books) {
             res.status(404).send({ status: false, message: "Book not found" })
+            return
         }
 
-        if (book) {
-            let reviews = await reviewModel.find({ bookId: book._id, isDeleted: false, deletedAt: null },{createdAt:0, __v: 0, updatedAt:0, isDeleted:0})
-            if (reviews) {
-                res.status(201).send({
-                    status: true, message: "Books List", data: {
-                        book,
-                        "reviewsData": reviews
-                    }
-                })
-            }
-        }
+        let reviews = await reviewModel.find({ bookId: books._id, isDeleted: false, deletedAt: null }, { createdAt: 0, __v: 0, updatedAt: 0, isDeleted: 0 })
+
+        let book = JSON.parse(JSON.stringify(books))
+
+        book['ReviewData'] = reviews
+        
+        // console.log(bookObject)
+        res.status(201).send({ status: true, message: "Books List", data: book })
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
     }
@@ -254,7 +272,7 @@ const updateBook = async function (req, res) {
         }
 
         if (!validator.isValidRequestBody(requestBody)) {
-            res.status(200).send({ status: true, message: 'No paramateres passed. Book unmodified'})
+            res.status(200).send({ status: true, message: 'No paramateres passed. Book unmodified' })
             return
         }
 

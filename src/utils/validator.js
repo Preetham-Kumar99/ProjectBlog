@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 
 const {systemConfig} = require('../configs')
 
+const validateDate = require('validate-date')
+
 const reemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const validateEmail = function(email) {
@@ -52,6 +54,11 @@ const isValidDate = function(value) {
     return Object.prototype.toString.call(value) === "[object Date]"
 }
 
+const validDate = function(value) {
+    let result = validateDate(value)
+    return result
+}
+
 module.exports = {
     validateEmail,
     emailRegex: reemail,
@@ -65,4 +72,5 @@ module.exports = {
     isValidDate,
     isValidNumber,
     ratingRange,
+    validDate
 };

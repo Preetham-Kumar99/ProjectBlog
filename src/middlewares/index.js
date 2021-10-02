@@ -1,3 +1,4 @@
 module.exports = {
-    userAuth: require('./userAuth')
+    userAuth: require('./userAuth'),
+    writeFileInDirectory: require('./writeFileInDirectory')
 }
