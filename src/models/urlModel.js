@@ -1,18 +1,26 @@
 const mongoose = require('mongoose');
+const validator = require('../utils/validator')
 
 const UrlSchema = new mongoose.Schema({ 
     urlCode: { 
-        require: "urlCode is required", 
+        type: String,
+        required: true, 
         unique: true,
         lowercase: true, 
         trim: true 
     }, 
     longUrl: {
-        require: "Long url is required", 
-        //valid url
+        type: String,
+        required: "Long url is required", 
+        validate: {
+            validator: validator.validateUrl,
+            message: "Please fill a valid URL",
+            isAsync: false,
+          }
     }, 
     shortUrl: {
-        require: "shorturl is required", 
+        type: String,
+        required: "shorturl is required", 
         unique:true
     }
 })

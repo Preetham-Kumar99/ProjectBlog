@@ -4,7 +4,7 @@ const reUrl = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?
 
 function getrandom() {    
     var text = "";    
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < 7; i++) { 
         text += possible.charAt(Math.floor(Math.random() * possible.length));   
     } 
