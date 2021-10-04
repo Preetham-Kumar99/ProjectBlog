@@ -2,7 +2,28 @@ const mongoose = require('mongoose');
 
 const urlModel = require('../models/urlModel');
 
+const redis = require("redis");
+
 const {validator} = require('../utils')
+
+const { promisify } = require("util");
+
+const redisClient = redis.createClient(
+    10337,
+    "redis-10337.c264.ap-south-1-1.ec2.cloud.redislabs.com",
+    { no_ready_check: true }
+  );
+  redisClient.auth("6L8SXmAlBLG8Z55VsrQtoTd1ugZZ6Qci", function (err) {
+    if (err) throw err;
+  });
+  
+  redisClient.on("connect", async function () {
+    console.log("Connected to Redis..");
+  });
+
+const SET_ASYNC = promisify(redisClient.SET).bind(redisClient);
+const SETEX_ASYNC = promisify(redisClient.SETEX).bind(redisClient);
+const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
 
 const shortUrl = async function(req,res){
@@ -38,6 +59,8 @@ const shortUrl = async function(req,res){
 
         let shortUrl = 'localhost:3000/' + urlCode
 
+        
+
         let createUrl = {
             longUrl: long,
             shortUrl,
@@ -45,6 +68,8 @@ const shortUrl = async function(req,res){
         }
 
         let newUrl = await urlModel.create(createUrl)
+
+        await SET_ASYNC(`${urlCode}`, createUrl.longUrl);
 
         res.status(201).send({Status:true, msg:"short url created sucessfully", data: newUrl})
 
@@ -64,6 +89,14 @@ const getUrl = async function(req,res){
             return
         }
 
+        let longUrl = await GET_ASYNC(`${code}`)
+
+        if(longUrl){
+            console.log("url found in cache")
+            res.status(200).redirect(longUrl)
+            return
+        }
+        
         let ifUrlExists = await urlModel.findOne({urlCode: code},{__v:0, _id:0})
 
         if(!ifUrlExists){
@@ -71,11 +104,7 @@ const getUrl = async function(req,res){
             return
         }
 
-
-
-        let longUrl = ifUrlExists.longUrl
-        console.log(longUrl)
-        console.log(longUrl.href)
+        longUrl = ifUrlExists.longUrl
         res.status(200).redirect(longUrl)
 
     }catch(error){
