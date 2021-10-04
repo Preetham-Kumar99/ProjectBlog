@@ -40,6 +40,17 @@ const shortUrl = async function(req,res){
             return
         }
 
+        let shortUrl = await GET_ASYNC(`${long}`)
+
+        if(shortUrl){
+            let data={longUrl: long, shortUrl: `localhost:3000/${shortUrl}`,urlCode: shortUrl}
+            console.log("url found in cache")
+            res.status(200).send({Status: false, msg:"Url already exists. Found in cached", data: data})
+            return
+        }
+        
+
+
         let ifLongUrlExists = await urlModel.findOne({longUrl:long},{__v:0, _id:0})
 
         if(ifLongUrlExists){
@@ -57,7 +68,7 @@ const shortUrl = async function(req,res){
             }
         }
 
-        let shortUrl = 'localhost:3000/' + urlCode
+        shortUrl = 'localhost:3000/' + urlCode
 
         
 
@@ -70,6 +81,7 @@ const shortUrl = async function(req,res){
         let newUrl = await urlModel.create(createUrl)
 
         await SET_ASYNC(`${urlCode}`, createUrl.longUrl);
+        await SET_ASYNC(`${createUrl.longUrl}`, urlCode);
 
         res.status(201).send({Status:true, msg:"short url created sucessfully", data: newUrl})
 
@@ -98,6 +110,7 @@ const getUrl = async function(req,res){
         }
         
         let ifUrlExists = await urlModel.findOne({urlCode: code},{__v:0, _id:0})
+        
 
         if(!ifUrlExists){
             res.status(404).send({Status: false, msg:"Url does not exists"})
@@ -105,6 +118,8 @@ const getUrl = async function(req,res){
         }
 
         longUrl = ifUrlExists.longUrl
+        await SET_ASYNC(`${urlCode}`, createUrl.longUrl);
+        await SET_ASYNC(`${createUrl.longUrl}`, urlCode);
         res.status(200).redirect(longUrl)
 
     }catch(error){
