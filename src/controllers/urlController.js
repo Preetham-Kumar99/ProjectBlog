@@ -44,8 +44,7 @@ const shortUrl = async function (req, res) {
 
         if (shortUrl) {
             let data = { longUrl: long, shortUrl: `localhost:3000/${shortUrl}`, urlCode: shortUrl }
-            console.log("url found in cache")
-            res.status(200).send({ Status: false, msg: "Url already exists. Found in cached", data: data })
+            res.status(303).send({ Status: false, msg: "URL already exist in cache", data: data })
             return
         }
 
@@ -54,7 +53,7 @@ const shortUrl = async function (req, res) {
         let ifLongUrlExists = await urlModel.findOne({ longUrl: long }, { __v: 0, _id: 0 })
 
         if (ifLongUrlExists) {
-            res.status(200).send({ Status: false, msg: "Url already exists", data: ifLongUrlExists })
+            res.status(303).send({ Status: false, msg: "Url already exists in DB", data: ifLongUrlExists })
             return
         }
 
@@ -83,7 +82,9 @@ const shortUrl = async function (req, res) {
         await SETEX_ASYNC(`${urlCode}`,3600, createUrl.longUrl);
         await SETEX_ASYNC(`${createUrl.longUrl}`,3600, urlCode);
 
-        res.status(201).send({ Status: true, msg: "short url created sucessfully", data: newUrl })
+        let data = {longUrl: newUrl.longUrl, shortUrl: newUrl.shortUrl, urlCode: newUrl.urlCode }
+
+        res.status(201).send({ Status: true, data: data })
 
     } catch (error) {
         res.status(500).send({ Status: false, msg: error.message })
@@ -105,7 +106,7 @@ const getUrl = async function (req, res) {
 
         if (longUrl) {
             console.log("url found in cache")
-            res.status(200).redirect(longUrl)
+            res.status(301).redirect(longUrl)
             return
         }
 
@@ -120,7 +121,7 @@ const getUrl = async function (req, res) {
         longUrl = ifUrlExists.longUrl
         await SETEX_ASYNC(`${urlCode}`,3600, createUrl.longUrl);
         await SETEX_ASYNC(`${createUrl.longUrl}`,3600, urlCode);
-        res.status(200).redirect(longUrl)
+        res.status(301).redirect(longUrl)
 
     } catch (error) {
         res.status(500).send({ Status: false, msg: error.message })
