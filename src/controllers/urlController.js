@@ -28,7 +28,7 @@ const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
 const shortUrl = async function (req, res) {
     try {
-        let long = req.body.url;
+        let long = req.body.url.trim();
 
         if (!long) {
             res.status(400).send({ Status: false, msg: "Url is Required" })
