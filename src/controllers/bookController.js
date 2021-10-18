@@ -143,8 +143,10 @@ const createBook = async function (req, res) {
             ISBN,
             category,
             releasedAt,
-            bookCover
+            bookCover: 'https://github.com/sabihak89/titaniumaplus/tree/W7D5/Preetham' + bookCover
         }
+
+        console.log(bookData.bookCover)
 
         if (subcategory) {
             if (validator.isArray(subcategory)) {
