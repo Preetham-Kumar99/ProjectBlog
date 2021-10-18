@@ -2,29 +2,9 @@ const mongoose = require('mongoose');
 
 const urlModel = require('../models/urlModel');
 
-const redis = require("redis");
-
-const { validator } = require('../utils')
+const { validator, redisClient } = require('../utils')
 
 const { promisify } = require("util");
-
-const redisClient = redis.createClient(
-    10337,
-    "redis-10337.c264.ap-south-1-1.ec2.cloud.redislabs.com",
-    { no_ready_check: true }
-);
-redisClient.auth("6L8SXmAlBLG8Z55VsrQtoTd1ugZZ6Qci", function (err) {
-    if (err) throw err;
-});
-
-redisClient.on("connect", async function () {
-    console.log("Connected to Redis..");
-});
-
-const SET_ASYNC = promisify(redisClient.SET).bind(redisClient);
-const SETEX_ASYNC = promisify(redisClient.SETEX).bind(redisClient);
-const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
-
 
 const shortUrl = async function (req, res) {
     try {
@@ -40,7 +20,7 @@ const shortUrl = async function (req, res) {
             return
         }
 
-        let shortUrl = await GET_ASYNC(`${long}`)
+        let shortUrl = await redisClient.GET_ASYNC(`${long}`)
 
         if (shortUrl) {
             let data = { longUrl: long, shortUrl: `localhost:3000/${shortUrl}`, urlCode: shortUrl }
@@ -79,8 +59,8 @@ const shortUrl = async function (req, res) {
 
         let newUrl = await urlModel.create(createUrl)
 
-        await SETEX_ASYNC(`${urlCode}`,3600, createUrl.longUrl);
-        await SETEX_ASYNC(`${createUrl.longUrl}`,3600, urlCode);
+        await redisClient.SETEX_ASYNC(`${urlCode}`,3600, createUrl.longUrl);
+        await redisClient.SETEX_ASYNC(`${createUrl.longUrl}`,3600, urlCode);
 
         let data = {longUrl: newUrl.longUrl, shortUrl: newUrl.shortUrl, urlCode: newUrl.urlCode }
 
@@ -102,7 +82,7 @@ const getUrl = async function (req, res) {
             return
         }
 
-        let longUrl = await GET_ASYNC(`${code}`)
+        let longUrl = await redisClient.GET_ASYNC(`${code}`)
 
         if (longUrl) {
             console.log("url found in cache")
@@ -119,8 +99,8 @@ const getUrl = async function (req, res) {
         }
 
         longUrl = ifUrlExists.longUrl
-        await SETEX_ASYNC(`${urlCode}`,3600, createUrl.longUrl);
-        await SETEX_ASYNC(`${createUrl.longUrl}`,3600, urlCode);
+        await redisClient.SETEX_ASYNC(`${code}`,3600, longUrl);
+        await redisClient.SETEX_ASYNC(`${longUrl}`,3600, code);
         res.status(301).redirect(longUrl)
 
     } catch (error) {
